@@ -1,0 +1,602 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le français facile ici</title>
+  <style>
+    :root {
+      --jaune: #FFCF56;
+      --corail: #FF8066;
+      --turquoise: #5CBCC5;
+      --creme: #F8F4E9;
+      --bleu: #253A53;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--creme);
+      color: var(--bleu);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--bleu);
+      color: white;
+      text-align: center;
+      padding: 35px 15px;
+    }
+
+    header h1 { margin: 0; font-size: 2rem; }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 15px;
+      background: var(--jaune);
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      background: var(--turquoise);
+      color: #142D38;
+    }
+
+    button:hover { filter: brightness(0.94); }
+
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid var(--corail);
+      outline-offset: 3px;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 25px auto;
+      padding: 15px;
+    }
+
+    .bienvenue {
+      text-align: center;
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 25px;
+    }
+
+    .grille {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 15px;
+    }
+
+    .carte {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 3px 10px #00000012;
+    }
+
+    .carte h3 { margin-bottom: 8px; }
+
+    .lecon {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    .cache { display: none; }
+
+    .question {
+      background: #F2F7F8;
+      border-radius: 12px;
+      padding: 18px;
+      margin: 15px 0;
+    }
+
+    .reponses {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .reponses button {
+      background: white;
+      border: 2px solid var(--turquoise);
+    }
+
+    .reponses button:disabled {
+      cursor: default;
+      opacity: 0.75;
+    }
+
+    .correct { color: #17633A; font-weight: bold; }
+    .incorrect { color: #A32D24; font-weight: bold; }
+
+    .assistant {
+      background: #E7F6F7;
+      border: 2px solid var(--turquoise);
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 30px;
+    }
+
+    .messages {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      min-height: 120px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+
+    .message {
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 10px;
+      background: #EAF0F6;
+      overflow-wrap: anywhere;
+    }
+
+    .eleve { background: #FFF0D0; }
+
+    .saisie {
+      display: flex;
+      gap: 8px;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid #A6B6BE;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    footer {
+      background: var(--bleu);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 35px;
+    }
+
+    @media (max-width: 600px) {
+      .saisie { flex-direction: column; }
+      header h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🌍 Le français facile ici</h1>
+    <p>J'apprends, je joue et je progresse !</p>
+    <p>Français langue étrangère | Niveaux A1-A2</p>
+  </header>
+
+  <nav aria-label="Navigation principale">
+    <button onclick="afficher('accueil')">🏠 Accueil</button>
+    <button onclick="afficher('vocabulaire')">📚 Vocabulaire</button>
+    <button onclick="afficher('grammaire')">📝 Grammaire</button>
+    <button onclick="afficher('conjugaison')">⏰ Conjugaison</button>
+    <button onclick="afficher('orthographe')">✏️ Orthographe</button>
+  </nav>
+
+  <main>
+    <section id="accueil">
+      <div class="bienvenue">
+        <h2>Bienvenue dans ton espace de français ! 🎉</h2>
+        <p>
+          Tu veux apprendre le français facilement ?
+          Découvre nos leçons, joue avec les mots
+          et entraîne-toi avec des exercices amusants.
+        </p>
+        <p>Choisis une rubrique pour commencer !</p>
+      </div>
+
+      <div class="grille">
+        <div class="carte">
+          <h3>📚 Vocabulaire</h3>
+          <p>Apprends de nouveaux mots.</p>
+          <button onclick="afficher('vocabulaire')">Découvrir</button>
+        </div>
+
+        <div class="carte">
+          <h3>📝 Grammaire</h3>
+          <p>Construis des phrases correctes.</p>
+          <button onclick="afficher('grammaire')">Découvrir</button>
+        </div>
+
+        <div class="carte">
+          <h3>⏰ Conjugaison</h3>
+          <p>Apprends à utiliser les verbes.</p>
+          <button onclick="afficher('conjugaison')">Découvrir</button>
+        </div>
+
+        <div class="carte">
+          <h3>✏️ Orthographe</h3>
+          <p>Apprends à bien écrire les mots.</p>
+          <button onclick="afficher('orthographe')">Découvrir</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="vocabulaire" class="cache">
+      <div class="lecon">
+        <h2>📚 Vocabulaire : les objets de la classe</h2>
+        <p>Observe les mots suivants :</p>
+        <ul>
+          <li>📖 Un livre</li>
+          <li>🖊️ Un stylo</li>
+          <li>✏️ Un crayon</li>
+          <li>📓 Un cahier</li>
+          <li>🎒 Un sac</li>
+        </ul>
+        <h3>À retenir</h3>
+        <p>On dit : « J'ai un livre et un stylo. »</p>
+        <div id="quiz-vocabulaire"></div>
+      </div>
+    </section>
+
+    <section id="grammaire" class="cache">
+      <div class="lecon">
+        <h2>📝 Grammaire : les articles</h2>
+        <p>En français, les noms sont souvent accompagnés d'un article.</p>
+        <ul>
+          <li><strong>Un</strong> livre</li>
+          <li><strong>Une</strong> table</li>
+          <li><strong>Le</strong> professeur</li>
+          <li><strong>La</strong> classe</li>
+          <li><strong>Les</strong> élèves</li>
+        </ul>
+        <h3>À retenir</h3>
+        <p>« Un » et « une » sont des articles indéfinis.</p>
+        <p>« Le », « la » et « les » sont des articles définis.</p>
+        <div id="quiz-grammaire"></div>
+      </div>
+    </section>
+
+    <section id="conjugaison" class="cache">
+      <div class="lecon">
+        <h2>⏰ Conjugaison : le verbe être</h2>
+        <p>Le verbe être au présent :</p>
+        <ul>
+          <li>Je suis</li>
+          <li>Tu es</li>
+          <li>Il / Elle est</li>
+          <li>Nous sommes</li>
+          <li>Vous êtes</li>
+          <li>Ils / Elles sont</li>
+        </ul>
+        <h3>Exemples</h3>
+        <p>Je suis élève. Nous sommes en classe.</p>
+        <div id="quiz-conjugaison"></div>
+      </div>
+    </section>
+
+    <section id="orthographe" class="cache">
+      <div class="lecon">
+        <h2>✏️ Orthographe : m devant m, b et p</h2>
+        <p>
+          En général, devant les lettres m, b et p,
+          on écrit « m » à la place de « n ».
+        </p>
+        <ul>
+          <li>Une lampe</li>
+          <li>Une chambre</li>
+          <li>Un nombre</li>
+          <li>Un emménagement</li>
+        </ul>
+        <p>
+          Attention : il existe des exceptions,
+          comme « bonbon ».
+        </p>
+        <div id="quiz-orthographe"></div>
+      </div>
+    </section>
+
+    <section class="assistant" aria-label="Assistant pédagogique">
+      <h2>🤖 Léo, ton compagnon de français</h2>
+      <p>
+        Bonjour ! Je suis Léo. Je peux t'aider à comprendre
+        tes leçons. Pose-moi une question !
+      </p>
+
+      <div id="messages" class="messages"
+           role="log" aria-live="polite">
+        <div class="message">
+          🤖 Léo : Bonjour ! Que veux-tu apprendre aujourd'hui ?
+        </div>
+      </div>
+
+      <form id="formulaire-chat" class="saisie">
+        <input
+          id="question-eleve"
+          type="text"
+          placeholder="Écris ta question ici..."
+          aria-label="Ta question pour Léo"
+          maxlength="300"
+          required
+        >
+        <button type="submit">Envoyer ➤</button>
+      </form>
+
+      <p><small>
+        Léo est un assistant pédagogique à réponses préparées.
+        Il ne remplace pas ton professeur.
+        N'écris pas d'informations personnelles dans le chat.
+      </small></p>
+    </section>
+
+    <div class="bienvenue" style="margin-top:25px">
+      <h2>🏆 Mes progrès</h2>
+      <p>Points obtenus pendant cette visite :</p>
+      <h2 id="score" aria-live="polite">0 ⭐</h2>
+      <button onclick="reinitialiser()">Recommencer les exercices</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Le français facile ici</p>
+    <p>Apprendre le français avec plaisir ! 🌟</p>
+  </footer>
+
+  <script>
+    let score = 0;
+
+    const sections = [
+      "accueil",
+      "vocabulaire",
+      "grammaire",
+      "conjugaison",
+      "orthographe"
+    ];
+
+    const exercices = {
+      vocabulaire: [
+        {
+          question: "Quel objet utilise-t-on pour écrire ?",
+          choix: ["Un stylo", "Un sac", "Un livre"],
+          bonne: 0,
+          indice: "On le tient dans la main pour écrire."
+        },
+        {
+          question: "Où peut-on ranger ses cahiers ?",
+          choix: ["Dans un sac", "Dans un crayon", "Dans un stylo"],
+          bonne: 0,
+          indice: "On le porte souvent sur le dos."
+        }
+      ],
+      grammaire: [
+        {
+          question: "Complète : C'est ... table.",
+          choix: ["un", "une", "des"],
+          bonne: 1,
+          indice: "Le nom « table » est féminin singulier."
+        },
+        {
+          question: "Complète : ... élèves sont dans la classe.",
+          choix: ["Le", "La", "Les"],
+          bonne: 2,
+          indice: "Le nom « élèves » est ici au pluriel."
+        }
+      ],
+      conjugaison: [
+        {
+          question: "Complète : Je ... élève.",
+          choix: ["suis", "es", "sommes"],
+          bonne: 0,
+          indice: "Avec « je », le verbe être commence par s."
+        },
+        {
+          question: "Complète : Nous ... contents.",
+          choix: ["êtes", "sont", "sommes"],
+          bonne: 2,
+          indice: "Regarde la conjugaison avec « nous »."
+        }
+      ],
+      orthographe: [
+        {
+          question: "Quel mot est bien écrit ?",
+          choix: ["lanpe", "lampe", "lamnpe"],
+          bonne: 1,
+          indice: "Devant p, on écrit généralement m."
+        },
+        {
+          question: "Quel mot est bien écrit ?",
+          choix: ["chambre", "chanbre", "chambreux"],
+          bonne: 0,
+          indice: "Pense à la règle du m devant b."
+        }
+      ]
+    };
+
+    function afficher(id) {
+      sections.forEach(section => {
+        document.getElementById(section)
+          .classList.toggle("cache", section !== id);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function creerQuiz() {
+      Object.keys(exercices).forEach(rubrique => {
+        const conteneur = document.getElementById(
+          "quiz-" + rubrique
+        );
+
+        conteneur.replaceChildren();
+
+        const titre = document.createElement("h3");
+        titre.textContent = "🎮 À toi de jouer !";
+        conteneur.appendChild(titre);
+
+        exercices[rubrique].forEach((exercice, index) => {
+          const bloc = document.createElement("div");
+          bloc.className = "question";
+
+          const question = document.createElement("p");
+          question.textContent =
+            (index + 1) + ". " + exercice.question;
+          bloc.appendChild(question);
+
+          const reponses = document.createElement("div");
+          reponses.className = "reponses";
+
+          const resultat = document.createElement("p");
+          resultat.setAttribute("aria-live", "polite");
+
+          const indice = document.createElement("button");
+          indice.textContent = "💡 Un indice";
+          indice.type = "button";
+
+          indice.addEventListener("click", () => {
+            resultat.textContent = exercice.indice;
+            resultat.className = "";
+          });
+
+          exercice.choix.forEach((choix, numero) => {
+            const bouton = document.createElement("button");
+            bouton.type = "button";
+            bouton.textContent = choix;
+
+            bouton.addEventListener("click", () => {
+              if (numero === exercice.bonne) {
+                resultat.textContent =
+                  "Bravo ! Bonne réponse ! 🎉";
+                resultat.className = "correct";
+
+                score += 10;
+                document.getElementById("score")
+                  .textContent = score + " ⭐";
+
+                reponses.querySelectorAll("button")
+                  .forEach(b => b.disabled = true);
+
+                indice.disabled = true;
+              } else {
+                resultat.textContent =
+                  "Essaie encore ! Tu peux demander un indice.";
+                resultat.className = "incorrect";
+              }
+            });
+
+            reponses.appendChild(bouton);
+          });
+
+          bloc.appendChild(reponses);
+          bloc.appendChild(indice);
+          bloc.appendChild(resultat);
+          conteneur.appendChild(bloc);
+        });
+      });
+    }
+
+    function reinitialiser() {
+      score = 0;
+      document.getElementById("score").textContent = "0 ⭐";
+      creerQuiz();
+      afficher("accueil");
+    }
+
+    function ajouterMessage(auteur, texte, estEleve = false) {
+      const messages = document.getElementById("messages");
+      const message = document.createElement("div");
+
+      message.className = estEleve
+        ? "message eleve"
+        : "message";
+
+      message.textContent = auteur + " : " + texte;
+      messages.appendChild(message);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function normaliser(texte) {
+      return texte.toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function reponseLeo(question) {
+      const texte = normaliser(question);
+
+      if (texte.includes("bonjour") ||
+          texte.includes("salut")) {
+        return "Bonjour ! 😊 Choisis une leçon et nous allons apprendre ensemble.";
+      }
+
+      if (texte.includes("vocabulaire") ||
+          texte.includes("mot")) {
+        return "Le vocabulaire, ce sont les mots d'une langue. Par exemple : livre, cahier, stylo. Peux-tu écrire une phrase avec le mot « livre » ?";
+      }
+
+      if (texte.includes("grammaire") ||
+          texte.includes("article")) {
+        return "La grammaire nous aide à construire des phrases. Par exemple : un livre, une table. À ton avis, dit-on « un chaise » ou « une chaise » ?";
+      }
+
+      if (texte.includes("conjugaison") ||
+          texte.includes("verbe") ||
+          texte.includes("etre")) {
+        return "La conjugaison change la forme du verbe selon la personne. Par exemple : je suis, tu es, il est. Comment complètes-tu : « Nous ... élèves » ?";
+      }
+
+      if (texte.includes("orthographe") ||
+          texte.includes("ecrire")) {
+        return "L'orthographe nous aide à écrire correctement. Souviens-toi : devant b et p, on écrit généralement m à la place de n. Peux-tu écrire correctement le mot « lanpe » ?";
+      }
+
+      if (texte.includes("exercice") ||
+          texte.includes("quiz")) {
+        return "Bonne idée ! 🎯 Choisis une rubrique, lis la leçon et réponds aux questions. Tu gagneras 10 points pour chaque bonne réponse.";
+      }
+
+      if (texte.includes("indice") ||
+          texte.includes("aide")) {
+        return "Je vais t'aider ! Relis la leçon, cherche un exemple semblable et essaie de trouver la réponse. Tu peux aussi utiliser le bouton « Un indice ».";
+      }
+
+      if (texte.includes("merci")) {
+        return "Avec plaisir ! 🌟 Continue à apprendre et à t'entraîner.";
+      }
+
+      return "C'est une bonne question ! 😊 Je ne connais pas encore cette réponse. Essaie de préciser si ta question concerne le vocabulaire, la grammaire, la conjugaison ou l'orthographe. Tu peux aussi demander à ton professeur.";
+    }
+
+    document.getElementById("formulaire-chat")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const champ = document.getElementById("question-eleve");
+        const question = champ.value.trim();
+
+        if (!question) return;
+
+        ajouterMessage("👧 Toi", question, true);
+        ajouterMessage("🤖 Léo", reponseLeo(question));
+
+        champ.value = "";
+        champ.focus();
+      });
+
+    creerQuiz();
+    afficher("accueil");
+  </script>
+</body>
+</html>
